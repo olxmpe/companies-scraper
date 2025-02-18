@@ -21,3 +21,15 @@ interface Department {
   code: string;
   nom: string;
 }
+
+interface ScrapRequest {
+  cities: string[];
+  sectors: string[];
+}
+
+interface ScrapResult {
+  name: string;
+  email: string;
+  sector: string;
+  city: string;
+}

@@ -7,7 +7,6 @@ export default defineNuxtConfig({
     public: {
       apiKey: process.env.API_KEY,
       cx: process.env.CX,
-      apiUrl: process.env.apiUrl,
     },
   },
 });
