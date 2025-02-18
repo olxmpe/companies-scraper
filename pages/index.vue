@@ -29,6 +29,8 @@ const filteredSectors = computed(() => {
   );
 });
 
+const ws = new WebSocket("ws://localhost:3001");
+
 const selectSector = (sector: string) => {
   if (!selectedSectors.value.includes(sector)) {
     selectedSectors.value.push(sector);
@@ -50,9 +52,20 @@ const startScraping = () => {
     sectors: selectedSectors.value,
   };
 
-  // $api.sendRequest("/scrap", "POST", formData);
-  console.log(formData);
+  console.log("📤 Envoi des données :", formData);
+  ws.send(JSON.stringify(formData));
+
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+
+    if (data.status === "success") {
+      console.log("✅ Résultats reçus :", data.results);
+    } else {
+      console.error("❌ Erreur :", data.message);
+    }
+  };
 };
+
 </script>
 
 <template>
@@ -91,6 +104,11 @@ const startScraping = () => {
     <div class="input-field">
       <p class="field-label">Code postal</p>
       <input type="number" class="input" v-model="zipCode" />
+    </div>
+
+    <div class="input-field">
+      <p class="field-label">Nom de l'export</p>
+      <input type="text" class="input" />
     </div>
 
     <div
