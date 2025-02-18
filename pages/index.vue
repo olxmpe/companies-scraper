@@ -4,7 +4,7 @@ import PlusIcon from "~/assets/PlusIcon.vue";
 
 const { $api } = useNuxtApp();
 
-const allSectors: string[] = [
+const sectors: string[] = [
   "Banque",
   "Assurance",
   "Informatique",
@@ -14,20 +14,29 @@ const allSectors: string[] = [
   "Transport",
   "Immobilier",
 ];
+const departments = ref([]);
 
 const sectorInput = ref<string>("");
+const departmentInput = ref<string>("");
+const cityInput = ref<string>("");
+
 const selectedSectors = ref<string[]>([]);
-const zipCode = ref<number>();
+const selectedCities = ref<string[]>([]);
+const selectedDepartments = ref<string[]>([]);
+const searchByDepartment = ref<boolean>(true);
 
 const filteredSectors = computed(() => {
   if (!sectorInput.value) return [];
   const normalizedInput = normalizeString(sectorInput.value);
-  return allSectors.filter(
+  return sectors.filter(
     (sector) =>
       normalizeString(sector).startsWith(normalizedInput) &&
       !selectedSectors.value.includes(sector)
   );
 });
+
+const filteredCities = ref<City[]>([]);
+const filteredDepartments = ref<Department[]>([]);
 
 const selectSector = (sector: string) => {
   if (!selectedSectors.value.includes(sector)) {
@@ -41,17 +50,106 @@ const removeSector = (sector: string) => {
 };
 
 const isFormDisabled = computed(() => {
-  return !zipCode.value || selectedSectors.value.length === 0;
+  return (
+    selectedSectors.value.length === 0 ||
+    (searchByDepartment.value
+      ? selectedDepartments.value.length === 0
+      : selectedCities.value.length === 0)
+  );
 });
 
-const startScraping = () => {
-  let formData = {
-    zipCode: zipCode.value,
+const startScraping = async () => {
+  let formData: { cities: string[]; sectors: string[] } = {
+    cities: [],
     sectors: selectedSectors.value,
   };
 
-  // $api.sendRequest("/scrap", "POST", formData);
+  if (searchByDepartment.value && selectedDepartments.value.length) {
+    for (const departmentCode of selectedDepartments.value) {
+      try {
+        const citiesInDepartment = await $api.getFranceAdministrativeDivision(
+          `departements/${departmentCode}/communes`
+        );
+
+        if (Array.isArray(citiesInDepartment)) {
+          formData.cities.push(
+            ...citiesInDepartment.map((city: City) => city.nom)
+          );
+        }
+      } catch (error) {
+        console.error(
+          `Erreur lors de la récupération des villes pour ${departmentCode}`,
+          error
+        );
+      }
+    }
+  } else {
+    formData.cities = [...selectedCities.value];
+  }
+
   console.log(formData);
+
+  selectedCities.value.length = 0;
+  selectedDepartments.value.length = 0;
+  selectedSectors.value.length = 0;
+};
+
+const getCities = async (input: string) => {
+  try {
+    const response = await $api.getFranceAdministrativeDivision(
+      `communes?nom=${encodeURIComponent(input)}&fields=nom,code`
+    );
+    filteredCities.value = response.map((city: City) => ({
+      nom: city.nom,
+      code: city.code,
+    }));
+  } catch (error) {
+    console.error(error);
+    filteredCities.value = [];
+  }
+};
+
+const getDepartments = async (input: string) => {
+  try {
+    const response = await $api.getFranceAdministrativeDivision(
+      `departements?code=${input}`
+    );
+
+    filteredDepartments.value = response.map((department: Department) => ({
+      nom: department.nom,
+      code: department.code,
+    }));
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const selectCity = (city: string) => {
+  selectedCities.value.push(city);
+  cityInput.value = "";
+};
+
+const removeCity = (city: string) => {
+  selectedCities.value = selectedCities.value.filter((c) => c !== city);
+};
+
+const selectDepartment = (department: Department["code"]) => {
+  selectedDepartments.value.push(department);
+  departmentInput.value = "";
+};
+
+const removeDepartment = (department: string) => {
+  selectedDepartments.value = selectedDepartments.value.filter(
+    (d) => d !== department
+  );
+};
+
+const toggleSearchMode = () => {
+  searchByDepartment.value = !searchByDepartment.value;
+  selectedCities.value = [];
+  selectedDepartments.value = [];
+  cityInput.value = "";
+  departmentInput.value = "";
 };
 </script>
 
@@ -64,7 +162,10 @@ const startScraping = () => {
     <div class="input-field relative">
       <p class="field-label">Secteurs à analyser</p>
       <input v-model="sectorInput" type="text" class="input" />
-      <ul v-if="filteredSectors.length" class="autocomplete-list">
+      <ul
+        v-if="filteredSectors.length && sectorInput"
+        class="autocomplete-list"
+      >
         <li
           v-for="sector in filteredSectors"
           :key="sector"
@@ -88,9 +189,82 @@ const startScraping = () => {
       </div>
     </div>
 
-    <div class="input-field">
-      <p class="field-label">Code postal</p>
-      <input type="number" class="input" v-model="zipCode" />
+    <div @click="toggleSearchMode" class="form-button flex toggle">
+      {{
+        searchByDepartment
+          ? "Rechercher par nom de commune"
+          : "Rechercher par n° de département"
+      }}
+    </div>
+
+    <div v-if="searchByDepartment">
+      <div class="input-field relative">
+        <input
+          v-model="departmentInput"
+          class="input"
+          placeholder="Numéro de département entre 01 et 95"
+          @input="getDepartments(departmentInput)"
+        />
+        <ul
+          v-if="filteredDepartments.length && departmentInput"
+          class="autocomplete-list"
+        >
+          <li
+            v-for="department in filteredDepartments"
+            :key="department.code"
+            @click="selectDepartment(department.code)"
+            class="autocomplete-item"
+          >
+            {{ department.nom }} ({{ department.code }})
+          </li>
+        </ul>
+      </div>
+
+      <div class="sectors tags flex">
+        <div
+          v-for="department in selectedDepartments"
+          :key="department"
+          class="tag flex"
+          @click="removeSector(department)"
+        >
+          <p>{{ department }}</p>
+          <PlusIcon style="transform: rotate(45deg)" />
+        </div>
+      </div>
+    </div>
+
+    <div v-else>
+      <div class="input-field relative">
+        <input
+          v-model="cityInput"
+          type="text"
+          class="input"
+          placeholder="Nom de commune"
+          @input="getCities(cityInput)"
+        />
+        <ul v-if="filteredCities.length && cityInput" class="autocomplete-list">
+          <li
+            v-for="city in filteredCities"
+            :key="city.code"
+            @click="selectCity(city.nom)"
+            class="autocomplete-item"
+          >
+            {{ city.nom }} ({{ city.code }})
+          </li>
+        </ul>
+      </div>
+
+      <div class="sectors tags flex">
+        <div
+          v-for="city in selectedCities"
+          :key="city"
+          class="tag flex"
+          @click="removeSector(city)"
+        >
+          <p>{{ city }}</p>
+          <PlusIcon style="transform: rotate(45deg)" />
+        </div>
+      </div>
     </div>
 
     <div
@@ -119,6 +293,8 @@ const startScraping = () => {
     padding: 0;
     margin: 0;
     z-index: 10;
+    max-height: 150px;
+    overflow: scroll;
 
     .autocomplete-item {
       padding: 8px;
@@ -133,6 +309,10 @@ const startScraping = () => {
 .sectors {
   border-radius: 5px;
   background-color: white;
+  margin: 1rem 0;
+}
+
+.toggle {
   margin: 1rem 0;
 }
 </style>

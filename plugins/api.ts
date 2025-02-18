@@ -9,10 +9,17 @@ export default defineNuxtPlugin(() => {
     });
   };
 
+  const getFranceAdministrativeDivision = async (
+    endpoint: string
+  ): Promise<City[] | Department[]> => {
+    return await sendRequest(`https://geo.api.gouv.fr/${endpoint}`, "GET");
+  };
+
   return {
     provide: {
       api: {
         sendRequest,
+        getFranceAdministrativeDivision,
       },
     },
   };

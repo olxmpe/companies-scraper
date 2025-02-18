@@ -11,3 +11,13 @@ interface User {
   lastName: string;
   firstName: string;
 }
+
+interface City {
+  code: string;
+  nom: string;
+}
+
+interface Department {
+  code: string;
+  nom: string;
+}
