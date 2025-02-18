@@ -38,6 +38,8 @@ const filteredSectors = computed(() => {
 const filteredCities = ref<City[]>([]);
 const filteredDepartments = ref<Department[]>([]);
 
+const ws = new WebSocket("ws://localhost:3001");
+
 const selectSector = (sector: string) => {
   if (!selectedSectors.value.includes(sector)) {
     selectedSectors.value.push(sector);
@@ -87,7 +89,18 @@ const startScraping = async () => {
     formData.cities = [...selectedCities.value];
   }
 
-  console.log(formData);
+  console.log("📤 Envoi des données :", formData);
+  ws.send(JSON.stringify(formData));
+
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+
+    if (data.status === "success") {
+      console.log("✅ Résultats reçus :", data.results);
+    } else {
+      console.error("❌ Erreur :", data.message);
+    }
+  };
 
   selectedCities.value.length = 0;
   selectedDepartments.value.length = 0;
@@ -202,7 +215,7 @@ const toggleSearchMode = () => {
         <input
           v-model="departmentInput"
           class="input"
-          placeholder="Numéro de département entre 01 et 95"
+          placeholder="Numéro de entre 01 et 95"
           @input="getDepartments(departmentInput)"
         />
         <ul
@@ -239,7 +252,6 @@ const toggleSearchMode = () => {
           v-model="cityInput"
           type="text"
           class="input"
-          placeholder="Nom de commune"
           @input="getCities(cityInput)"
         />
         <ul v-if="filteredCities.length && cityInput" class="autocomplete-list">
@@ -265,6 +277,11 @@ const toggleSearchMode = () => {
           <PlusIcon style="transform: rotate(45deg)" />
         </div>
       </div>
+    </div>
+
+    <div class="input-field">
+      <p class="field-label">Nom de l'export</p>
+      <input type="text" class="input" />
     </div>
 
     <div
