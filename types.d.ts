@@ -21,3 +21,15 @@ interface Department {
   code: string;
   nom: string;
 }
+
+type Export = {
+  id: number;
+  name: string;
+  created_at: string;
+};
+
+interface CsvStatusItem {
+  status: "processing" | "success" | "error";
+  message: string;
+  filename?: string;
+}

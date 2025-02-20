@@ -5,41 +5,181 @@ import PlusIcon from "~/assets/PlusIcon.vue";
 const { $api } = useNuxtApp();
 
 const sectors: string[] = [
-  "Restaurant", "Hôtel", "Café", "Bar", "Boulangerie", "Pâtisserie", "Boucherie", "Traiteur",
-  "Coiffeur", "Salon de beauté", "Institut de beauté", "Spa", "Salle de sport", "Gymnase",
-  "Salle de cinéma", "Théâtre", "Musée", "Galerie d'art", "Bibliothèque", "Bureau de poste",
-  "Pharmacie", "Clinique", "Hôpital", "Cabinet médical", "Dentiste", "Opticien", "Laboratoire",
-  "Supermarché", "Magasin de vêtements", "Magasin de chaussures", "Quincaillerie", "Jardinage",
-  "Animalerie", "Papeterie", "Marché", "Camping", "Auberge", "Chambre d'hôtes", "Gîte",
-  "Agence de voyage", "Bureau de change", "Agence immobilière", "Banque", "Commissariat de police",
-  "Station-service", "Garage automobile", "Concession automobile", "Atelier de réparation",
-  "Laverie", "Pressing", "Photographe", "Salle de jeux", "Karaoké", "Discothèque", "Casino",
-  "Parc d'attractions", "Zoo", "Aquarium", "Gare", "Aéroport", "Port maritime", "Cabinet d'avocats",
-  "Notaire", "Entreprise de nettoyage", "Entreprise de construction", "École", "Université",
-  "Établissement scolaire privé", "Crèche", "Centre de loisirs", "Centre de rééducation",
-  "Centre de formation professionnelle", "Coaching", "Cabinet de conseil", "Cabinet de recrutement",
-  "Centre médical", "Centre dentaire", "Pharmacie vétérinaire", "Bureau d'études", "Agence de publicité",
-  "Agence de communication", "Agence web", "Centre d'appel", "Centre de data", "Espace de coworking",
-  "Ferme", "Domaine viticole", "Brasserie", "Distillerie", "Laboratoire pharmaceutique",
-  "Éditeur de logiciels", "Tiers-lieu", "Épicerie fine", "Vente en ligne", "Magasin d'électronique",
-  "Magasin de meubles", "Bricolage", "Service de livraison", "Transport de marchandises",
-  "Taxi", "VTC", "Service de location de voitures", "Centre de bien-être", "Salle de massage",
-  "Club de sport", "École de danse", "Ecole de musique", "Réseau de télécommunication",
-  "Entrepreneur individuel", "Startup", "Incubateur", "Laboratoire de recherche", "Centre scientifique",
-  "Hôpital vétérinaire", "Clinique vétérinaire", "Médiathèque", "Centre communautaire",
-  "Lieu de culte", "Église", "Mosquée", "Temple", "Synagogue", "Gîte d'étape", "Auberge de jeunesse",
-  "Pépinière d'entreprises", "Atelier de création", "Ferme pédagogique", "Maison de retraite",
-  "Château", "Lieu de mariage", "Bar à cocktails", "Restaurant gastronomique", "Fast food",
-  "Brewpub", "Distributeur automatique", "Cave à vin", "Salons professionnels", "Espace événementiel",
-  "Parc naturel", "Observatoire", "Chapelle", "Cimetière", "Motel", "Hostel", "Taverne", "Brewery",
-  "Studio photo", "Galerie de peinture", "Exposition d'art", "Entreprise de transport",
-  "Service d'entretien", "Société d'assurance", "Plateforme de crowdfunding", "Vente de détail en ligne",
-  "Banque en ligne", "Entreprise de télécommunications", "Société de gestion d'actifs", "Cabinet fiscaliste",
-  "Entrepreneur social", "Service d'accompagnement à domicile", "Centre d'hébergement",
-  "Service de médiation", "Maison de santé", "Enseignement supérieur", "Centre d'expertise",
-  "Entreprise de sécurité", "Entreprise de conseil en management", "Entreprise de recrutement",
-  "Entreprise de marketing digital", "Société de marketing d'influence", "Société de production audiovisuelle",
-  "École d'architecture", "Service de traduction", "Centre d'enseignement des langues", "Atelier d'artisanat"
+  "Restaurant",
+  "Hôtel",
+  "Café",
+  "Bar",
+  "Boulangerie",
+  "Pâtisserie",
+  "Boucherie",
+  "Traiteur",
+  "Coiffeur",
+  "Salon de beauté",
+  "Institut de beauté",
+  "Spa",
+  "Salle de sport",
+  "Gymnase",
+  "Salle de cinéma",
+  "Théâtre",
+  "Musée",
+  "Galerie d'art",
+  "Bibliothèque",
+  "Bureau de poste",
+  "Pharmacie",
+  "Clinique",
+  "Hôpital",
+  "Cabinet médical",
+  "Dentiste",
+  "Opticien",
+  "Laboratoire",
+  "Supermarché",
+  "Magasin de vêtements",
+  "Magasin de chaussures",
+  "Quincaillerie",
+  "Jardinage",
+  "Animalerie",
+  "Papeterie",
+  "Marché",
+  "Camping",
+  "Auberge",
+  "Chambre d'hôtes",
+  "Gîte",
+  "Agence de voyage",
+  "Bureau de change",
+  "Agence immobilière",
+  "Banque",
+  "Commissariat de police",
+  "Station-service",
+  "Garage automobile",
+  "Concession automobile",
+  "Atelier de réparation",
+  "Laverie",
+  "Pressing",
+  "Photographe",
+  "Salle de jeux",
+  "Karaoké",
+  "Discothèque",
+  "Casino",
+  "Parc d'attractions",
+  "Zoo",
+  "Aquarium",
+  "Gare",
+  "Aéroport",
+  "Port maritime",
+  "Cabinet d'avocats",
+  "Notaire",
+  "Entreprise de nettoyage",
+  "Entreprise de construction",
+  "École",
+  "Université",
+  "Établissement scolaire privé",
+  "Crèche",
+  "Centre de loisirs",
+  "Centre de rééducation",
+  "Centre de formation professionnelle",
+  "Coaching",
+  "Cabinet de conseil",
+  "Cabinet de recrutement",
+  "Centre médical",
+  "Centre dentaire",
+  "Pharmacie vétérinaire",
+  "Bureau d'études",
+  "Agence de publicité",
+  "Agence de communication",
+  "Agence web",
+  "Centre d'appel",
+  "Centre de data",
+  "Espace de coworking",
+  "Ferme",
+  "Domaine viticole",
+  "Brasserie",
+  "Distillerie",
+  "Laboratoire pharmaceutique",
+  "Éditeur de logiciels",
+  "Tiers-lieu",
+  "Épicerie fine",
+  "Vente en ligne",
+  "Magasin d'électronique",
+  "Magasin de meubles",
+  "Bricolage",
+  "Service de livraison",
+  "Transport de marchandises",
+  "Taxi",
+  "VTC",
+  "Service de location de voitures",
+  "Centre de bien-être",
+  "Salle de massage",
+  "Club de sport",
+  "École de danse",
+  "Ecole de musique",
+  "Réseau de télécommunication",
+  "Entrepreneur individuel",
+  "Startup",
+  "Incubateur",
+  "Laboratoire de recherche",
+  "Centre scientifique",
+  "Hôpital vétérinaire",
+  "Clinique vétérinaire",
+  "Médiathèque",
+  "Centre communautaire",
+  "Lieu de culte",
+  "Église",
+  "Mosquée",
+  "Temple",
+  "Synagogue",
+  "Gîte d'étape",
+  "Auberge de jeunesse",
+  "Pépinière d'entreprises",
+  "Atelier de création",
+  "Ferme pédagogique",
+  "Maison de retraite",
+  "Château",
+  "Lieu de mariage",
+  "Bar à cocktails",
+  "Restaurant gastronomique",
+  "Fast food",
+  "Brewpub",
+  "Distributeur automatique",
+  "Cave à vin",
+  "Salons professionnels",
+  "Espace événementiel",
+  "Parc naturel",
+  "Observatoire",
+  "Chapelle",
+  "Cimetière",
+  "Motel",
+  "Hostel",
+  "Taverne",
+  "Brewery",
+  "Studio photo",
+  "Galerie de peinture",
+  "Exposition d'art",
+  "Entreprise de transport",
+  "Service d'entretien",
+  "Société d'assurance",
+  "Plateforme de crowdfunding",
+  "Vente de détail en ligne",
+  "Banque en ligne",
+  "Entreprise de télécommunications",
+  "Société de gestion d'actifs",
+  "Cabinet fiscaliste",
+  "Entrepreneur social",
+  "Service d'accompagnement à domicile",
+  "Centre d'hébergement",
+  "Service de médiation",
+  "Maison de santé",
+  "Enseignement supérieur",
+  "Centre d'expertise",
+  "Entreprise de sécurité",
+  "Entreprise de conseil en management",
+  "Entreprise de recrutement",
+  "Entreprise de marketing digital",
+  "Société de marketing d'influence",
+  "Société de production audiovisuelle",
+  "École d'architecture",
+  "Service de traduction",
+  "Centre d'enseignement des langues",
+  "Atelier d'artisanat",
 ];
 const departments = ref([]);
 
@@ -54,16 +194,16 @@ const selectedDepartments = ref<string[]>([]);
 const searchByDepartment = ref<boolean>(true);
 const name = ref<string>("");
 
-const exports = ref([]);
-const csvStatus = ref({});
+const exports = ref<Export[]>([]);
+const csvStatus = ref<Record<number, CsvStatusItem>>({});
 
 const filteredSectors = computed(() => {
   if (!sectorInput.value) return [];
   const normalizedInput = normalizeString(sectorInput.value);
   return sectors.filter(
-      (sector) =>
-          normalizeString(sector).startsWith(normalizedInput) &&
-          !selectedSectors.value.includes(sector)
+    (sector) =>
+      normalizeString(sector).startsWith(normalizedInput) &&
+      !selectedSectors.value.includes(sector)
   );
 });
 
@@ -86,35 +226,36 @@ const removeSector = (sector: string) => {
 
 const isFormDisabled = computed(() => {
   return (
-      selectedSectors.value.length === 0 ||
-      (searchByDepartment.value
-          ? selectedDepartments.value.length === 0
-          : selectedCities.value.length === 0)
+    selectedSectors.value.length === 0 ||
+    (searchByDepartment.value
+      ? selectedDepartments.value.length === 0
+      : selectedCities.value.length === 0)
   );
 });
 
 const startScraping = async () => {
-  let formData: { cities: string[]; sectors: string[], export_name: string } = {
+  let formData: { cities: string[]; sectors: string[]; export_name: string } = {
     cities: [],
     sectors: selectedSectors.value,
+    export_name: "",
   };
 
   if (searchByDepartment.value && selectedDepartments.value.length) {
     for (const departmentCode of selectedDepartments.value) {
       try {
         const citiesInDepartment = await $api.getFranceAdministrativeDivision(
-            `departements/${departmentCode}/communes`
+          `departements/${departmentCode}/communes`
         );
 
         if (Array.isArray(citiesInDepartment)) {
           formData.cities.push(
-              ...citiesInDepartment.map((city: City) => city.nom)
+            ...citiesInDepartment.map((city: City) => city.nom)
           );
         }
       } catch (error) {
         console.error(
-            `Erreur lors de la récupération des villes pour ${departmentCode}`,
-            error
+          `Erreur lors de la récupération des villes pour ${departmentCode}`,
+          error
         );
       }
     }
@@ -138,12 +279,13 @@ const startScraping = async () => {
   selectedCities.value.length = 0;
   selectedDepartments.value.length = 0;
   selectedSectors.value.length = 0;
+  nameInput.value = "";
 };
 
 const getCities = async (input: string) => {
   try {
     const response = await $api.getFranceAdministrativeDivision(
-        `communes?nom=${encodeURIComponent(input)}&fields=nom,code`
+      `communes?nom=${encodeURIComponent(input)}&fields=nom,code`
     );
     filteredCities.value = response.map((city: City) => ({
       nom: city.nom,
@@ -158,7 +300,7 @@ const getCities = async (input: string) => {
 const getDepartments = async (input: string) => {
   try {
     const response = await $api.getFranceAdministrativeDivision(
-        `departements?code=${input}`
+      `departements?code=${input}`
     );
 
     filteredDepartments.value = response.map((department: Department) => ({
@@ -171,7 +313,9 @@ const getDepartments = async (input: string) => {
 };
 
 const selectCity = (city: string) => {
-  selectedCities.value.push(city);
+  if (!selectedCities.value.includes(city)) {
+    selectedCities.value.push(city);
+  }
   cityInput.value = "";
 };
 
@@ -180,13 +324,15 @@ const removeCity = (city: string) => {
 };
 
 const selectDepartment = (department: Department["code"]) => {
-  selectedDepartments.value.push(department);
+  if (!selectedDepartments.value.includes(department)) {
+    selectedDepartments.value.push(department);
+  }
   departmentInput.value = "";
 };
 
 const removeDepartment = (department: string) => {
   selectedDepartments.value = selectedDepartments.value.filter(
-      (d) => d !== department
+    (d) => d !== department
   );
 };
 
@@ -200,19 +346,25 @@ const toggleSearchMode = () => {
 
 const fetchExports = async () => {
   try {
-    const response = await fetch('/api/exports');
+    const response = await fetch("/api/exports");
     const data = await response.json();
     exports.value = data.body;
 
     // Vérifiez si les fichiers CSV existent déjà
     for (const exportItem of exports.value) {
-      const filename = `export_${exportItem.name}_${new Date(exportItem.created_at).toISOString().split('T')[0]}.csv`.replace(/[^a-z0-9_.-]/gi, '_');
+      const filename = `export_${exportItem.name}_${
+        new Date(exportItem.created_at).toISOString().split("T")[0]
+      }.csv`.replace(/[^a-z0-9_.-]/gi, "_");
       const filepath = `/downloads/${filename}`;
 
       try {
         const fileResponse = await fetch(filepath);
         if (fileResponse.ok) {
-          csvStatus.value[exportItem.id] = { status: 'success', message: 'CSV déjà généré.', filename };
+          csvStatus.value[exportItem.id] = {
+            status: "success",
+            message: "CSV déjà généré.",
+            filename,
+          };
         }
       } catch (error) {
         console.error(`Fichier non trouvé : ${filename}`, error);
@@ -224,12 +376,15 @@ const fetchExports = async () => {
 };
 
 const formatDate = (dateString: string) => {
-  const date = new Date(dateString.replace(' ', 'T') + 'Z');
+  const date = new Date(dateString.replace(" ", "T") + "Z");
   return isNaN(date.getTime()) ? "Date invalide" : date.toLocaleString();
 };
 
 const requestCSV = (exportId: number) => {
-  csvStatus.value[exportId] = { status: 'processing', message: 'Génération en cours...' };
+  csvStatus.value[exportId] = {
+    status: "processing",
+    message: "Génération en cours...",
+  };
   csvWs.send(JSON.stringify({ exportId }));
 };
 
@@ -240,7 +395,7 @@ csvWs.onmessage = (event) => {
   // Log pour vérifier la réception du message de succès
   console.log(`Message reçu : ${status} pour l'export ${exportId}`);
 
-  if (status === 'success') {
+  if (status === "success") {
     csvStatus.value[exportId] = { status, message, filename };
   } else {
     csvStatus.value[exportId] = { status, message };
@@ -253,159 +408,208 @@ onMounted(() => {
 </script>
 
 <template>
-  <NuxtLayout>
-    <div class="header">
-      <h2>Commencer la moisson</h2>
-    </div>
+  <div class="content-wrapper flex">
+    <div class="section">
+      <div class="header">
+        <h2>Paramétrer</h2>
+      </div>
 
-    <div class="input-field relative">
-      <p class="field-label">Secteurs à analyser</p>
-      <input v-model="sectorInput" type="text" class="input" />
-      <ul
+      <div class="input-field">
+        <p class="field-label">Secteurs à analyser</p>
+        <input v-model="sectorInput" type="text" class="input" />
+        <ul
           v-if="filteredSectors.length && sectorInput"
           class="autocomplete-list"
-      >
-        <li
+        >
+          <li
             v-for="sector in filteredSectors"
             :key="sector"
             @click="selectSector(sector)"
             class="autocomplete-item"
-        >
-          {{ sector }}
-        </li>
-      </ul>
-    </div>
-
-    <div class="sectors tags flex">
-      <div
-          v-for="sector in selectedSectors"
-          :key="sector"
-          class="tag flex"
-          @click="removeSector(sector)"
-      >
-        <p>{{ sector }}</p>
-        <PlusIcon style="transform: rotate(45deg)" />
+          >
+            {{ sector }}
+          </li>
+        </ul>
       </div>
-    </div>
 
-    <div @click="toggleSearchMode" class="form-button flex toggle">
-      {{
-        searchByDepartment
-            ? "Rechercher par nom de commune"
-            : "Rechercher par n° de département"
-      }}
-    </div>
+      <div class="input-field">
+        <div class="flex buttons">
+          <div
+            @click="toggleSearchMode"
+            class="form-button flex"
+            :class="{ light: searchByDepartment }"
+          >
+            Nom de commune
+          </div>
 
-    <div v-if="searchByDepartment">
-      <div class="input-field relative">
-        <input
+          <div
+            @click="toggleSearchMode"
+            class="form-button flex"
+            :class="{ light: !searchByDepartment }"
+          >
+            N° de département
+          </div>
+        </div>
+      </div>
+
+      <div v-if="searchByDepartment">
+        <div class="input-field">
+          <input
             v-model="departmentInput"
             class="input"
             placeholder="Numéro de entre 01 et 95"
             @input="getDepartments(departmentInput)"
-        />
-        <ul
+          />
+          <ul
             v-if="filteredDepartments.length && departmentInput"
             class="autocomplete-list"
-        >
-          <li
+          >
+            <li
               v-for="department in filteredDepartments"
               :key="department.code"
               @click="selectDepartment(department.code)"
               class="autocomplete-item"
-          >
-            {{ department.nom }} ({{ department.code }})
-          </li>
-        </ul>
-      </div>
-
-      <div class="sectors tags flex">
-        <div
-            v-for="department in selectedDepartments"
-            :key="department"
-            class="tag flex"
-            @click="removeSector(department)"
-        >
-          <p>{{ department }}</p>
-          <PlusIcon style="transform: rotate(45deg)" />
+            >
+              {{ department.nom }} ({{ department.code }})
+            </li>
+          </ul>
         </div>
       </div>
-    </div>
 
-    <div v-else>
-      <div class="input-field relative">
-        <input
+      <div v-else>
+        <div class="input-field">
+          <input
             v-model="cityInput"
             type="text"
             class="input"
             @input="getCities(cityInput)"
-        />
-        <ul v-if="filteredCities.length && cityInput" class="autocomplete-list">
-          <li
+            placeholder="Nom de commune"
+          />
+          <ul
+            v-if="filteredCities.length && cityInput"
+            class="autocomplete-list"
+          >
+            <li
               v-for="city in filteredCities"
               :key="city.code"
               @click="selectCity(city.nom)"
               class="autocomplete-item"
-          >
-            {{ city.nom }} ({{ city.code }})
-          </li>
-        </ul>
+            >
+              {{ city.nom }} ({{ city.code }})
+            </li>
+          </ul>
+        </div>
       </div>
+      <div class="input-field">
+        <p class="field-label">Nom de l'export</p>
+        <input type="text" class="input" v-model="nameInput" />
+      </div>
+    </div>
 
-      <div class="sectors tags flex">
+    <div class="section">
+      <div class="header">
+        <h2>Moissoner</h2>
+      </div>
+      <p class="title">Secteurs</p>
+      <div class="tags flex">
         <div
-            v-for="city in selectedCities"
-            :key="city"
-            class="tag flex"
-            @click="removeSector(city)"
+          v-for="sector in selectedSectors"
+          :key="sector"
+          class="tag flex"
+          @click="removeSector(sector)"
         >
-          <p>{{ city }}</p>
+          <p>{{ sector }}</p>
           <PlusIcon style="transform: rotate(45deg)" />
         </div>
       </div>
-    </div>
 
-    <div class="input-field">
-      <p class="field-label">Nom de l'export</p>
-      <input type="text" class="input" v-model="nameInput" />
-    </div>
+      <p class="title">Zones à moissoner</p>
+      <div class="input-field">
+        <div class="tags flex" v-if="!searchByDepartment">
+          <div
+            v-for="city in selectedCities"
+            :key="city"
+            class="tag flex"
+            @click="removeCity(city)"
+          >
+            <p>{{ city }}</p>
+            <PlusIcon style="transform: rotate(45deg)" />
+          </div>
+        </div>
 
-    <div
+        <div class="tags flex" v-else>
+          <div
+            v-for="department in selectedDepartments"
+            :key="department"
+            class="tag flex"
+            @click="removeDepartment(department)"
+          >
+            <p>{{ department }}</p>
+            <PlusIcon style="transform: rotate(45deg)" />
+          </div>
+        </div>
+      </div>
+
+      <div
         class="form-button flex"
         @click="startScraping()"
         :class="{ disabled: isFormDisabled }"
-    >
-      Lancer la recherche
+      >
+        Lancer la recherche
+      </div>
     </div>
 
-    <div class="exports-list">
-      <h3>Liste des exports</h3>
-      <ul>
-        <li v-for="exportItem in exports" :key="exportItem.id">
-          {{ exportItem.name }} - {{ formatDate(exportItem.created_at) }}
-          <button
-              v-if="!csvStatus[exportItem.id] || csvStatus[exportItem.id].status === 'error'"
+    <div class="section">
+      <div class="exports-list">
+        <div class="header"><h2>Consulter</h2></div>
+        <ul>
+          <li v-for="exportItem in exports" :key="exportItem.id" class="flex">
+            {{ exportItem.name }} - {{ formatDate(exportItem.created_at) }}
+            <div
+              class="form-button flex"
+              style="max-width: max-content"
+              v-if="
+                !csvStatus[exportItem.id] ||
+                csvStatus[exportItem.id].status === 'error'
+              "
               @click="requestCSV(exportItem.id)"
-          >
-            Générer le CSV
-          </button>
-          <span v-if="csvStatus[exportItem.id]?.status === 'processing'">
-            <i class="spinner"></i> Génération en cours...
-          </span>
-          <a
+            >
+              Générer le CSV
+            </div>
+            <span v-if="csvStatus[exportItem.id]?.status === 'processing'">
+              <i class="spinner"></i> Génération en cours...
+            </span>
+            <a
               v-if="csvStatus[exportItem.id]?.status === 'success'"
               :href="`/downloads/${csvStatus[exportItem.id].filename}`"
               download
-          >
-            Télécharger
-          </a>
-        </li>
-      </ul>
+            >
+              Télécharger
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </NuxtLayout>
+  </div>
 </template>
 
 <style scoped lang="scss">
+.content-wrapper {
+  padding: 2rem 0;
+  background-color: var(--sand-background);
+  min-height: var(--app-height);
+
+  .section {
+    padding: 2rem;
+    border-radius: 10px;
+    background-color: var(--lighter-background);
+    width: auto;
+    flex: 1;
+    min-width: 350px;
+    max-width: 80%;
+  }
+}
+
 .input-field {
   position: relative;
 
@@ -422,11 +626,12 @@ onMounted(() => {
     margin: 0;
     z-index: 10;
     max-height: 150px;
-    overflow: scroll;
+    overflow-y: auto;
 
     .autocomplete-item {
       padding: 8px;
       cursor: pointer;
+
       &:hover {
         background: #f0f0f0;
       }
@@ -434,24 +639,7 @@ onMounted(() => {
   }
 }
 
-.sectors {
-  border-radius: 5px;
-  background-color: white;
-  margin: 1rem 0;
-}
-
-.toggle {
-  margin: 1rem 0;
-}
-
 .exports-list {
-  margin-top: 2rem;
-
-  h3 {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
-  }
-
   ul {
     list-style-type: none;
     padding: 0;
@@ -461,23 +649,9 @@ onMounted(() => {
       border-bottom: 1px solid #ddd;
       display: flex;
       justify-content: space-between;
-      align-items: center;
 
       &:last-child {
         border-bottom: none;
-      }
-
-      button, a {
-        margin-left: 1rem;
-        padding: 0.5rem 1rem;
-        background-color: #007bff;
-        color: white;
-        border-radius: 4px;
-        text-decoration: none;
-      }
-
-      a {
-        background-color: #28a745;
       }
 
       .spinner {
@@ -493,7 +667,11 @@ onMounted(() => {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
