@@ -10,9 +10,7 @@
 <style scoped lang="scss">
 .content-wrapper {
   background-color: var(--sand-background);
-  display: flex;
   flex-direction: column;
-  gap: 10px;
   align-items: center;
   justify-content: center;
   height: var(--app-height);
